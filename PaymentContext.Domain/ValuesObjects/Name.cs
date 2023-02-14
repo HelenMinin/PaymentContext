@@ -11,5 +11,11 @@ public class Name : ValueObject
     {
         FirstName = firstName;
         LastName = lastName;
+        
+        
+        if (string.IsNullOrWhiteSpace(FirstName))
+        {
+            AddNotification("Name.FirstName", "Nome inválido");
+        }
     }
 }

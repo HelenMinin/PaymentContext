@@ -19,6 +19,8 @@ public class Student : Entity
         Document = document;
         Email = email;
         _subscriptions = new List<Subscription>();
+        
+        AddNotifications(name, document, email);
     }
 
     public void AddSubscription(Subscription subscription)
