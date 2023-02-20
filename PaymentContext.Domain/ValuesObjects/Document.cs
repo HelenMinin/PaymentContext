@@ -1,3 +1,6 @@
+using System.Text.RegularExpressions;
+using Flunt.Notifications;
+using Flunt.Validations;
 using PaymentContext.Domain.Enums;
 using PaymentContext.Shared.ValuesObjects;
 
@@ -12,5 +15,21 @@ public class Document : ValueObject
     {
         Number = number;
         Type = type;
+
+        AddNotifications(new Contract<Notification>()
+            .Requires()
+            .IsFalse(IsDocumentValid(), "Document.Number", "Documento inválido"));
+    }
+
+    public bool IsDocumentValid()
+    {
+        var numbeReplace = Regex.Replace(Number, "[^0-9]", "");
+
+        return Type switch
+        {
+            EDocumentType.CPF => numbeReplace.Length == 11,
+            EDocumentType.CNPJ => numbeReplace.Length == 14,
+            _ => false
+        };
     }
 }
