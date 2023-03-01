@@ -1,3 +1,5 @@
+using Flunt.Notifications;
+using Flunt.Validations;
 using PaymentContext.Domain.ValueObjects;
 using PaymentContext.Shared.Entities;
 
@@ -5,7 +7,7 @@ namespace PaymentContext.Domain.Entities;
 
 public class Student : Entity
 {
-    private List<Subscription> _subscriptions;
+    private readonly List<Subscription> _subscriptions;
 
     public Name Name { get; set; }
     public Document Document { get; private set; }
@@ -25,6 +27,17 @@ public class Student : Entity
 
     public void AddSubscription(Subscription subscription)
     {
+        if (!subscription.Payments.Any())
+        {
+            AddNotifications(new Contract<Notification>()
+                .Requires()
+                .IsGreaterThan(0,
+                    subscription.Payments.Count,
+                    "Student.Subscription.Payments", 
+                    "Está assinatura não possui pagamentos"));
+            return;
+        }
+        
         _subscriptions.ForEach(sub => sub.Inactivated());
 
         _subscriptions.Add(subscription);

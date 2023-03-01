@@ -18,17 +18,20 @@ public class Document : ValueObject
 
         AddNotifications(new Contract<Notification>()
             .Requires()
-            .IsFalse(IsDocumentValid(), "Document.Number", "Documento inválido"));
+            .IsTrue(IsDocumentValid(), "Document.Number", "Documento inválido"));
     }
 
     public bool IsDocumentValid()
     {
+        if (Number == null)
+            return false;
+        
         var numbeReplace = Regex.Replace(Number, "[^0-9]", "");
 
         return Type switch
         {
-            EDocumentType.CPF => numbeReplace.Length == 11,
-            EDocumentType.CNPJ => numbeReplace.Length == 14,
+            EDocumentType.CPF => numbeReplace?.Length == 11,
+            EDocumentType.CNPJ => numbeReplace?.Length == 14,
             _ => false
         };
     }
