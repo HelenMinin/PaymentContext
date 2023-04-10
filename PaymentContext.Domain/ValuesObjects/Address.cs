@@ -21,12 +21,5 @@ public class Address : ValueObject
         City = city;
         Country = country;
         ZipCode = zipCode;
-
-        AddNotifications(new Contract<Notification>().Requires()
-            .IsNullOrWhiteSpace(Street, "Address.Street", "A rua não pode ser vazio")
-            .IsNullOrWhiteSpace(Number, "Address.Number", "Número não pode ser vazio")
-            .IsNullOrWhiteSpace(City, "Address.City", "Cidade não pode ser vazia")
-            .IsNullOrWhiteSpace(Country, "Address.Country", "País não pode ser vazio")
-            .IsNullOrWhiteSpace(ZipCode, "Address.ZipCode", "CEP não pode ser vazio"));
     }
 }
